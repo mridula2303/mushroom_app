@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushroom Classification Form</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('/static/image.jpg');  /* Background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 1200px;  /* Expanded width to accommodate 3 fields per row */
+            width: 100%;
+            text-align: left;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #ffffff;
+            width: 100%;
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);  /* Twelve columns for more flexibility */
+            grid-gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .form-group label {
+            grid-column: span 2;
+            font-weight: bold;
+            color: #333;
+            align-self: center;
+            text-align: right;  /* Align labels to the right */
+        }
+        .form-group select {
+            grid-column: span 2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        input[type="submit"] {
+            grid-column: span 12; /* Make the submit button span across all columns */
+            padding: 15px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .prediction-result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 30px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <h2>Mushroom Classification</h2>
+    <div class="form-container">
+        <form action="{{ url_for('predict') }}" method="post">
+            <div class="form-group">
+                <label for="cap-shape">Cap Shape:</label>
+                <select id="cap-shape" name="cap-shape" required>
+                    <option value="convex">convex</option>
+                    <option value="flat">flat</option>
+                    <option value="knobbed">knobbed</option>
+                    <option value="bell">bell</option>
+                    <option value="sunken">sunken</option>
+                </select>
+
+                <label for="cap-surface">Cap Surface:</label>
+                <select id="cap-surface" name="cap-surface" required>
+                    <option value="scaly">scaly</option>
+                    <option value="smooth">smooth</option>
+                    <option value="fibrous">fibrous</option>
+                    <option value="grooves">grooves</option>
+                </select>
+
+                <label for="cap-color">Cap Color:</label>
+                <select id="cap-color" name="cap-color" required>
+                    <option value="brown">brown</option>
+                    <option value="gray">gray</option>
+                    <option value="red">red</option>
+                    <option value="yellow">yellow</option>
+                    <option value="white">white</option>
+                    <option value="buff">buff</option>
+                    <option value="pink">pink</option>
+                    <option value="cinnamon">cinnamon</option>
+                    <option value="purple">purple</option>
+                    <option value="green">green</option>
+                    <option value="orange">orange</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bruises">Bruises:</label>
+                <select id="bruises" name="bruises" required>
+                    <option value="no">no</option>
+                    <option value="bruises">bruises</option>
+                </select>
+
+                <label for="odor">Odor:</label>
+                <select id="odor" name="odor" required>
+                    <option value="none">none</option>
+                    <option value="foul">foul</option>
+                    <option value="fishy">fishy</option>
+                    <option value="spicy">spicy</option>
+                    <option value="almond">almond</option>
+                    <option value="anise">anise</option>
+                    <option value="pungent">pungent</option>
+                    <option value="creosote">creosote</option>
+                    <option value="musty">musty</option>
+                </select>
+
+                <label for="gill-spacing">Gill Spacing:</label>
+                <select id="gill-spacing" name="gill-spacing" required>
+                    <option value="close">close</option>
+                    <option value="crowded">crowded</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gill-size">Gill Size:</label>
+                <select id="gill-size" name="gill-size" required>
+                    <option value="broad">broad</option>
+                    <option value="narrow">narrow</option>
+                </select>
+
+                <label for="gill-color">Gill Color:</label>
+                <select id="gill-color" name="gill-color" required>
+                    <option value="black">black</option>
+                    <option value="brown">brown</option>
+                    <option value="gray">gray</option>
+                    <option value="pink">pink</option>
+                    <option value="white">white</option>
+                    <option value="chocolate">chocolate</option>
+                    <option value="purple">purple</option>
+                    <option value="red">red</option>
+                    <option value="buff">buff</option>
+                    <option value="green">green</option>
+                    <option value="yellow">yellow</option>
+                    <option value="orange">orange</option>
+                </select>
+
+                <label for="stalk-shape">Stalk Shape:</label>
+                <select id="stalk-shape" name="stalk-shape" required>
+                    <option value="tapering">tapering</option>
+                    <option value="enlarging">enlarging</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="stalk-root">Stalk Root:</label>
+                <select id="stalk-root" name="stalk-root" required>
+                    <option value="bulbous">bulbous</option>
+                    <option value="equal">equal</option>
+                    <option value="club">club</option>
+                    <option value="rooted">rooted</option>
+                </select>
+
+                <label for="stalk-surface-above-ring">Stalk Surface Above Ring:</label>
+                <select id="stalk-surface-above-ring" name="stalk-surface-above-ring" required>
+                    <option value="smooth">smooth</option>
+                    <option value="silky">silky</option>
+                    <option value="fibrous">fibrous</option>
+                    <option value="scaly">scaly</option>
+                </select>
+
+                <label for="stalk-surface-below-ring">Stalk Surface Below Ring:</label>
+                <select id="stalk-surface-below-ring" name="stalk-surface-below-ring" required>
+                    <option value="smooth">smooth</option>
+                    <option value="silky">silky</option>
+                    <option value="fibrous">fibrous</option>
+                    <option value="scaly">scaly</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="stalk-color-above-ring">Stalk Color Above Ring:</label>
+                <select id="stalk-color-above-ring" name="stalk-color-above-ring" required>
+                    <option value="white">white</option>
+                    <option value="pink">pink</option>
+                    <option value="gray">gray</option>
+                    <option value="brown">brown</option>
+                    <option value="buff">buff</option>
+                    <option value="orange">orange</option>
+                    <option value="red">red</option>
+                    <option value="cinnamon">cinnamon</option>
+                    <option value="yellow">yellow</option>
+                </select>
+
+                <label for="stalk-color-below-ring">Stalk Color Below Ring:</label>
+                <select id="stalk-color-below-ring" name="stalk-color-below-ring" required>
+                    <option value="white">white</option>
+                    <option value="pink">pink</option>
+                    <option value="gray">gray</option>
+                    <option value="brown">brown</option>
+                    <option value="buff">buff</option>
+                    <option value="orange">orange</option>
+                    <option value="red">red</option>
+                    <option value="cinnamon">cinnamon</option>
+                    <option value="yellow">yellow</option>
+                </select>
+                
+                <label for="habitat">Habitat:</label>
+                <select id="habitat" name="habitat" required>
+                    <option value="woods">woods</option>
+                    <option value="grasses">grasses</option>
+                    <option value="path">path</option>
+                    <option value="leaves">leaves</option>
+                    <option value="urban">urban</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="veil-color">Veil Color:</label>
+                <select id="veil-color" name="veil-color" required>
+                    <option value="white">white</option>
+                    <option value="brown">brown</option>
+                    <option value="orange">orange</option>
+                    <option value="yellow">yellow</option>
+                </select>
+
+                <label for="ring-number">Ring Number:</label>
+                <select id="ring-number" name="ring-number" required>
+                    <option value="none">none</option>
+                    <option value="one">one</option>
+                    <option value="two">two</option>
+                </select>
+
+                <label for="ring-type">Ring Type:</label>
+                <select id="ring-type" name="ring-type" required>
+                    <option value="pendant">pendant</option>
+                    <option value="evanescent">evanescent</option>
+                    <option value="large">large</option>
+                    <option value="flaring">flaring</option>
+                    <option value="none">none</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="spore-print-color">Spore Print Color:</label>
+                <select id="spore-print-color" name="spore-print-color" required>
+                    <option value="white">white</option>
+                    <option value="brown">brown</option>
+                    <option value="black">black</option>
+                    <option value="chocolate">chocolate</option>
+                    <option value="green">green</option>
+                    <option value="purple">purple</option>
+                    <option value="orange">orange</option>
+                    <option value="yellow">yellow</option>
+                    <option value="buff">buff</option>
+                </select>
+
+                <label for="population">Population:</label>
+                <select id="population" name="population" required>
+                    <option value="several">several</option>
+                    <option value="solitary">solitary</option>
+                    <option value="scattered">scattered</option>
+                    <option value="numerous">numerous</option>
+                    <option value="abundant">abundant</option>
+                </select>
+
+                
+            </div>
+            <input type="submit" value="Predict">
+        </form>
+        <!-- Display prediction result if available -->
+        {% if prediction_text %}
+        <div class="prediction-result">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
